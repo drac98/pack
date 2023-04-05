@@ -132,4 +132,5 @@ replace (
 	github.com/docker/docker => github.com/docker/docker v20.10.21+incompatible
 	github.com/moby/buildkit => github.com/moby/buildkit v0.8.3
 	github.com/opencontainers/runc => github.com/opencontainers/runc v1.0.0-rc95
+	github.com/buildpacks/imgutil => github.com/drac98/imgutil v0.1.0
 )
