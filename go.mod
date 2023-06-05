@@ -5,10 +5,10 @@ require (
 	github.com/Masterminds/semver v1.5.0
 	github.com/Microsoft/go-winio v0.6.1
 	github.com/apex/log v1.9.0
-	github.com/buildpacks/imgutil v0.0.0-20230626185301-726f02e4225c
-	github.com/buildpacks/lifecycle v0.17.0
-	github.com/docker/cli v24.0.6+incompatible
-	github.com/docker/docker v24.0.6+incompatible
+	github.com/buildpacks/imgutil v0.0.0-20230428141433-24db5a78c900
+	github.com/buildpacks/lifecycle v0.17.0-pre.2
+	github.com/docker/cli v24.0.2+incompatible
+	github.com/docker/docker v24.0.2+incompatible
 	github.com/docker/go-connections v0.4.0
 	github.com/dustin/go-humanize v1.0.1
 	github.com/gdamore/tcell/v2 v2.6.0
@@ -109,8 +109,8 @@ require (
 	github.com/rivo/uniseg v0.4.3 // indirect
 	github.com/rogpeppe/go-internal v1.10.0 // indirect
 	github.com/sergi/go-diff v1.2.0 // indirect
-	github.com/sirupsen/logrus v1.9.3 // indirect
-	github.com/skeema/knownhosts v1.2.0 // indirect
+	github.com/sirupsen/logrus v1.9.2 // indirect
+	github.com/skeema/knownhosts v1.1.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/vbatts/tar-split v0.11.3 // indirect
 	github.com/xanzy/ssh-agent v0.3.3 // indirect
@@ -125,3 +125,5 @@ require (
 )
 
 go 1.20
+
+replace github.com/buildpacks/imgutil => github.com/drac98/imgutil v1.3.0
