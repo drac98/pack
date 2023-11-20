@@ -1,9 +1,12 @@
 package commands
 
 import (
+	"fmt"
 	"path/filepath"
+	"strings"
 
 	"github.com/buildpacks/imgutil"
+	"github.com/google/go-containerregistry/pkg/name"
 	"github.com/pkg/errors"
 
 	"github.com/buildpacks/pack/internal/config"
@@ -27,7 +30,7 @@ func ManifestCreate(logger logging.Logger, pack PackClient) *cobra.Command {
 		Use:   "create <manifest-list> <manifest> [<manifest> ... ]",
 		Short: "Creates a manifest list",
 		Args:  cobra.MatchAll(cobra.MinimumNArgs(2)),
-		Example: `pack manifest create create cnbs/sample-package:hello-multiarch-universe \ 
+		Example: `pack manifest create cnbs/sample-package:hello-multiarch-universe \ 
 					cnbs/sample-package:hello-universe \ 
 					cnbs/sample-package:hello-universe-windows`,
 		Long: "manifest create generates a manifest list for a multi-arch image",
@@ -47,6 +50,7 @@ func ManifestCreate(logger logging.Logger, pack PackClient) *cobra.Command {
 			}
 
 			manifestDir := filepath.Join(packHome, "manifests")
+			fmt.Println(manifestDir)
 
 			indexName := args[0]
 			manifests := args[1:]
@@ -69,7 +73,7 @@ func ManifestCreate(logger logging.Logger, pack PackClient) *cobra.Command {
 
 	cmd.Flags().BoolVar(&flags.Publish, "publish", false, `Publish to registry`)
 	cmd.Flags().BoolVar(&flags.Insecure, "insecure", false, `Allow publishing to insecure registry`)
-	cmd.Flags().StringVarP(&flags.Format, "format", "f", "v2s2", `Format to save image index as ("OCI" or "V2S2")`)
+	cmd.Flags().StringVarP(&flags.Format, "format", "f", "v2s2", `image index format [supported: OCI, V2S2(default)]`)
 	cmd.Flags().StringVarP(&flags.Registry, "registry", "r", "", `Registry URL to publish the image index`)
 
 	AddHelpFlag(cmd, "create")
@@ -77,16 +81,20 @@ func ManifestCreate(logger logging.Logger, pack PackClient) *cobra.Command {
 }
 
 func validateManifestCreateFlags(p *ManifestCreateFlags) error {
-	if p.Format == "" {
-		return errors.Errorf("--format flag received an empty value")
+	if p.Registry != "" {
+		_, err := name.ParseReference(p.Registry)
+		if err != nil {
+			return errors.Errorf("invalid registry URL ")
+		}
 	}
+
 	return nil
 }
 
 func validateMediaTypeFlag(format string) (imgutil.MediaTypes, error) {
 	var mediaType imgutil.MediaTypes
 
-	switch format {
+	switch strings.ToLower(format) {
 	case "oci":
 		mediaType = imgutil.OCITypes
 	case "v2s2":
